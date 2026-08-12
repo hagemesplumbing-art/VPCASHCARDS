@@ -770,6 +770,14 @@
       renderCard(true);
     }
 
+    // Mouse + touch interactions
+    cardElement.addEventListener('click', (event) => {
+      if (event.target.closest('.card-back-content')) {
+        return;
+      }
+      toggleFlip();
+    });
+
     // Touch Handling (Prevents flip on swipe)
     let touchStartX = 0;
     let touchStartY = 0;
