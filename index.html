@@ -689,8 +689,13 @@
       const deltaX = touchEndX - touchStartX;
       const deltaY = touchEndY - touchStartY;
 
+      // If primarily vertical movement, allow scrolling (don't intercept)
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        return;
+      }
+
       // Only treat as horizontal swipe if horizontal displacement exceeds vertical movement
-      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (Math.abs(deltaX) > 40) {
         if (deltaX > 0) prevCard();
         else nextCard();
       } else if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
