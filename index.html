@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#121212">
+  <meta name="description" content="CashCards for Plumbers - Interactive 46 Card E-Deck with sales scripts and objection handling">
+  <link rel="manifest" href="manifest.json">
+  <title>CashCards for Plumbers - Complete 46 Card E-Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #222222;
+      --text-main: #f0f0f0;
+      --text-sub: #a0a0a0;
+      --accent-color: #e2b714;
+      --card-border: #3d3d3d;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 10px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    h1 {
+      margin: 0 0 4px 0;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    p.subtitle {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 0.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background-color: var(--card-bg);
+      color: #fff;
+      font-size: 1rem;
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-sub);
+    }
+
+    .card-container {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 440px;
+      height: 60vh;
+      height: 60dvh;
+      max-height: 520px;
+      min-height: 380px;
+      cursor: pointer;
+      touch-action: pan-y;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      border: 3px solid var(--card-border);
+      background-color: var(--card-bg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translateZ(0);
+    }
+
+    .card-front {
+      text-align: center;
+      align-items: center;
+      background: linear-gradient(145deg, #181818, #2a2a2a);
+      position: relative;
+      z-index: 2;
+      transform: rotateY(0deg);
+    }
+
+    .card-corner {
+      position: absolute;
+      font-size: 1.1rem;
+      color: #ffffff;
+      line-height: 1;
+    }
+    .top-left { top: 12px; left: 14px; }
+    .top-right { top: 12px; right: 14px; }
+    .bottom-left { bottom: 12px; left: 14px; }
+    .bottom-right { bottom: 12px; right: 14px; }
+
+    .card-front .header-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    .center-icon {
+      font-size: 3.2rem;
+      margin: 10px 0 5px 0;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .card-front .card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.15;
+      margin: 10px 0;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .card-front .footer-logo {
+      margin-bottom: 5px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 8px;
+      width: 85%;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      letter-spacing: 1px;
+    }
+
+    .card-front .footer-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background-color: #1a1a1a;
+      text-align: left;
+      z-index: 1;
+    }
+
+    .script-text {
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: #e2e2e2;
+      white-space: pre-line;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .why-it-works {
+      margin-top: 15px;
+      padding: 10px 12px;
+      border-top: 2px solid var(--accent-color);
+      background-color: #111111;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .why-it-works-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .why-it-works-text {
+      font-size: 0.82rem;
+      color: #bbb;
+      line-height: 1.35;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 440px;
+      margin-top: 12px;
+      gap: 15px;
+    }
+
+    .nav-button {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .nav-button:active {
+      background-color: var(--accent-color);
+      color: #000;
+      transform: scale(0.95);
+    }
+
+    .counter {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      font-weight: 700;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .controls {
+        flex-wrap: wrap;
+      }
+
+      input[type="text"] {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CashCards for Plumbers</h1>
+    <p class="subtitle">Tap card to flip • Swipe to navigate</p>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search card title or script..." oninput="filterCards()">
+  </div>
+
+  <div id="noResults" class="no-results" style="display:none;">
+    <p>No cards match your search.</p>
+  </div>
+
+  <div class="card-container" id="cardContainer" style="display:none;">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="card-corner top-left">♠</div>
+        <div class="card-corner top-right">♠</div>
+        <div class="card-corner bottom-left">🔧</div>
+        <div class="card-corner bottom-right">🔧</div>
+
+        <div class="header-tag">CASHCARDS FOR PLUMBERS</div>
+        
+        <div class="center-icon" id="frontIcon">💡</div>
+        <div class="card-title" id="frontTitle">LOADING...</div>
+        
+        <div class="footer-logo">STUPAR ENTERPRISES</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="script-text" id="backScript"></div>
+        <div class="why-it-works" id="whyBlock">
+          <div class="why-it-works-title">WHY IT WORKS</div>
+          <div class="why-it-works-text" id="whyText"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation" id="navigationContainer" style="display:none;">
+    <button class="nav-button" onclick="prevCard()">← PREV</button>
+    <span class="counter" id="cardCounter">1 of 46</span>
+    <button class="nav-button" onclick="nextCard()">NEXT →</button>
+  </div>
+
+  <script>
+    const deck = [
+      {
+        title: "NEED TO THINK ABOUT IT",
+        icon: "🧠",
+        script: `I completely understand...\n\nI don't make any decisions without thinking about it first...\n\nTELL ME...\n\nOn a scale from 1-10, 10 meaning you're ready to move forward right now and 1 meaning you wouldn't do this if it were free...\n\nWhere would you put yourself on that scale from 1-10?\n\nWhat would make it a 10 right now?`,
+        why: "Since 'thinking about it' is NOT the reason they aren't closing, be prepared to handle additional objections."
+      },
+      {
+        title: "IT'S NOT AN URGENT ISSUE",
+        icon: "⚠️",
+        script: `I completely understand that this isn't a huge concern for you right now and we're more than happy to come out later on.\n\nThe truth is that you don't need to get this done today, after all, this isn't a total emergency.\n\nBut I don't suppose that's the reason why you decided to have us out today?\n\nI would assume you had us out today because you want to get this done, enjoy the comfort of your home and make sure that a small plumbing issue won't turn into a bigger project later.\n\nWhen is the last time you felt good about not getting what you wanted?`,
+        why: "Truth is, your customer might not NEED what you have right now - but that's okay because IF they're there, in the first place, it's because they WANT the solution."
+      },
+      {
+        title: "I WANT AN ITEMIZED ESTIMATE",
+        icon: "📊",
+        script: `I hear you and can totally respect that you want to understand the cost.\n\nMost homeowners appreciate that we use a flat-rate for pricing, because they get a full out-the-door price with no surprises.\n\nThis way, you're not paying by the hour - or worse - get nickeled and dimed for every little part.\n\nUltimately, do you have more attention on the individual line items for a project or the final, total job including equipment, material and labor?`,
+        why: "You're acknowledging and redirecting the conversation without giving in. Build value in your value and if you have to, you can show what the total includes."
+      },
+      {
+        title: "DO YOU DO ANY SIDE WORK?",
+        icon: "🪧",
+        script: `I do get asked that sometimes by homeowners looking to save a few bucks.\n\nHowever, I here am representing my company for a reason: we do things right, back everything with a warranty and make sure the work we do fully protects you.\n\nAnything I do outside of here wouldn't come with that same peace of mind. Is saving a little bit worth taking on all the risk for that?\n\nIf you want to shut this down ask:\n\nI appreciate the offer, but I'd rather keep my job than get fired for working on the side. Thanks for understanding. How do you want to move forward?`,
+        why: "This is professional, redirects the conversation toward the value of working with a real company, and builds trust with the homeowner."
+      },
+      {
+        title: "UNLOCK FREE BONUS TRAINING",
+        icon: "📲",
+        script: `THE CASHCARDS COURSE\n\nThere's only so much info we can fit on the cards. Join the Cashcards Double-Up Course!\n\nThe Psychology Behind Closing\nThe Objection Handling Formula\nThe Difference Between Decision Vs. Logic\nHow To Eliminate Objections\n\nWe'll also send you some plumbing specific sales techniques to help you continue selling more jobs and destroy your competition.\n\nLearn more in 1 hour about selling plumbing than you have in your entire career from plenty of trainers who haven't even been in a customer's home.`,
+        why: "Scan the QR code on your card for free access to The Sales Academy bonus training materials."
+      },
+      {
+        title: "I'M GOING TO SLEEP ON IT",
+        icon: "🛌",
+        script: `I completely understand that you're not quite ready to make the decision and that you want to sleep on it...\n\nI tend to get my best sleep after days of making great decisions which usually help me make more great decisions the next day...\n\nWhat is the last time you slept and turned all-night over making a great decision for your family / home / business / your team?`,
+        why: "The success of this word track relies on telling it in a humorous way. The bar for this same response from 'I need to think about it' cards."
+      },
+      {
+        title: "MONTHLY PRICE IS TOO HIGH #3",
+        icon: "🔄",
+        script: `Can you think of any other bill that you pay monthly on a monthly basis that you love to pay because they are too low?\n\n'No, I can't.'\n\nI hear you, me neither.\n\nAlthough this might turn into your favorite monthly bill, it is the one thing standing between you and the comfort you're looking for in your home.\n\nLet's do this!`,
+        why: "Similar to 'I found a cheaper price' word track - remind them that comfort in their home is worth paying for, and that nobody truly enjoys paying any bill."
+      },
+      {
+        title: "ARE YOU READY TO CLOSE MORE JOBS AND EARN MORE MONEY?",
+        icon: "💰",
+        script: `THANK YOU FOR PURCHASING A DECK OF CASHCARDS!\n\nThis deck includes word tracks to handle almost any sales objection that you will hear during a sales presentation to radically increase your selling skills and income.\n\nWARNING: Mastering the word tracks and responses on these Cashcards may drastically increase your confidence and income.\n\nYou can use your Cashcards JUST like you used cards as a child to memorize concepts or teach yourself as a child.`,
+        why: "STUPAR ENTERPRISES - Practice your word tracks until they are second nature."
+      },
+      {
+        title: "MONTHLY PRICE IS TOO HIGH",
+        icon: "💲",
+        script: `I completely understand that the monthly price seems a bit high.\n\nTo be clear, when you say the price is too high - are you saying that it's outside of your budget, that you found a similar product for less or it's more than what you were hoping to pay but are going to do it anyway?\n\n(Smile, be enthusiastic and close)`,
+        why: "All you're doing here is figuring out what type of objection you're trying to lay. We all commit to spending more money when we really want something."
+      },
+      {
+        title: "I NEED THIS DONE SOONER",
+        icon: "⏱️",
+        script: `I understand that you're looking to complete this project sooner!\n\nAlthough our team would enjoy being able to move with speed, we know the importance of making sure the work we do is done right, because high quality work is what lasts.\n\nAnd that's one of the reasons for the job timeline, customers value our attention to detail and the peace of mind that comes along with knowing the project completed the right way.\n\nI understand that you might not want to wait that long, but have you ever been disappointed by waiting for the right thing before?`,
+        why: "Even if your timeline on completion is longer - emphasize the quality and peace of mind they are getting by taking your time."
+      },
+      {
+        title: "WE'LL JUST DO THIS LATER",
+        icon: "⏳",
+        script: `I got it and totally understand that you're planning on doing this later...\n\nAnd I'm with you, too. You're probably super busy, have a million things going on and have tons of other things to think about.\n\nLet's get this handled now so that you can put this off your plate and move on to all the other things that really matter.\n\nHow's about we get things off, anyway?\n\n(Smile at the end)`,
+        why: "Your buyer has better things to do than think about plumbing. Be upfront and write in a way that helps them get off their plate - this word track handles it quickly."
+      },
+      {
+        title: "NEED TO TALK TO SOMEONE",
+        icon: "💬",
+        script: `I totally understand, I usually like to run my big decisions by others as well...\n\nBased on everything we've talked about so far, I'm curious, feel confident that you'll be able to show them the same value you see in us now?\n\n'Yes'\n\nGreat! What do you think is going to be their favorite thing?\n\n'XYZ...'\n\nI agree! Although we all can't be heroes everyday, this is your chance to say 'yes' to the right plumbing system in your home and finally be the hero your family needs.`,
+        why: "This word track gives your buyer the exact tools to handle the missing party who isn't present, turning them into your biggest advocate."
+      },
+      {
+        title: "WE ARE GOING TO WAIT...",
+        icon: "🪑",
+        script: `I completely understand and can respect that you are going to wait until later.\n\nIf you're anything like me, you probably can't stand waiting for things that you actually enjoy or help solve a problem...\n\nYou mentioned that you really liked [Feature 1] and [Feature 2]...\n\nLet's go ahead and get this done so you can spend the time you were going to wait actually enjoying the [benefit] and peace of mind knowing that it's done and handled.\n\nHow do you want to handle your This - Visa or Mastercard?`,
+        why: "There's nothing good about waiting. This word track is great because it reminds the customer of what they already told you they really enjoy about your product."
+      },
+      {
+        title: "NEED TO TALK TO MY SPOUSE",
+        icon: "💍",
+        script: `I completely understand!\n\nI usually talk to my spouse before making decisions too - after all, I don't like being in the dog house...\n\nOut of curiosity, what are you going to do if your spouse said 'no'?\n\n'I'd do it anyway' | 'I wouldn't do it'\n\nGreat! How would you like to handle payment today? | I understand. What exactly would they say 'no' to? Getting this taken care of or the pricing options?`,
+        why: "It's likely that the spouse is not the real objection, so be prepared to handle the REAL objection like the price or other variables."
+      },
+      {
+        title: "THIS IS OUT OF OUR BUDGET #2",
+        icon: "🧾",
+        script: `I hear you and completely understand I do, too...\n\nTell me, when was the last time you went 'over budget' for something you really wanted?\n\n'When I bought XYZ...'\n\nNice! And have you ever regretted making the decision to get the things you really want and deserve?\n\n'No...'\n\nI didn't think so! Let's get this done so you can enjoy this decision, too!`,
+        why: "Make sure to be relatable - we all spend more than we intend to on the things we really want - and when we do, we don't regret it."
+      },
+      {
+        title: "GOT A CHEAPER BID ELSEWHERE",
+        icon: "🤼",
+        script: `I totally understand and I get it - I like to save money when I can, too...\n\nNot saying that I can, but if our price was the same as theirs, which company would you rather do business with?\n\n'You'\n\nLove to hear that! Tell me, why would you rather do business with us if our prices were the same?\n\n'Because of X...'\n\nI figured you might say that! Now you can see why we charge a couple more dollars than they do, have you ever regretted spending just a little more for a better service?\n\n'No...'\n\nWhen your customer tells you why they would rather do business with you, they are giving you the 'Why', two or three times more.`,
+        why: "When your customer tells you why they would rather do business with you, they're explaining why your higher price is justified."
+      },
+      {
+        title: "MONTHLY PRICE IS TOO HIGH #2",
+        icon: "💸",
+        script: `I completely understand that the monthly rate seems a little high.\n\nThat's why most of our customers pay annually (or pay in full) and write a check for [total price].\n\nThat way, they don't have to pay anything monthly!\n\nDoes that sound a lot better to you?\n\n(Smile and be logical)`,
+        why: "This word track works extremely well if you're offering a financing solution or recurring payment."
+      },
+      {
+        title: "I DON'T WANT TO BE UPSOLD",
+        icon: "🤲",
+        script: `Hey! Totally get that you don't want to be upsold - I don't like it when sales people do that, either.\n\nMy job is simple: to inspect the plumbing system, identify any potential issues and provide you with the information you need to make the best decision moving forward.\n\nWhen it comes to your home's plumbing, I'll always put the ball in your court.\n\nAnd I promise to NEVER sell you anything you don't want to buy.\n\nFair enough?`,
+        why: "Take the period and pressure off your customer by mentioning that all you're going to do is give them information. That's fair!"
+      },
+      {
+        title: "I HAVE A HOME WARRANTY",
+        icon: "🛡️",
+        script: `Totally understand that you've got a home warranty - a lot of homeowners have the same thing.\n\nQuick question though...\n\nIf your pipe burst tomorrow, would you rather wait for the warranty company to find whatever contractor they can find... or have someone local and accountable to get it fixed right away?\n\nOptional Add-On / Alternative:\nWe work with a lot of homeowners who have warranties - but they still call us because they want it done right the first time, without the back and forth, fine print or delays.`,
+        why: "Your customers don't want delays, lowest-bid contractors, fine print or headaches. Acknowledge this, but use your expertise and build urgency to do it now."
+      },
+      {
+        title: "THIS IS TOO EXPENSIVE",
+        icon: "🏷️",
+        script: `I completely understand and appreciate the feedback.\n\nWhen you say 'too expensive', do you mean you found a similar product for less or that this outside of your budget right now?\n\n(Be prepared to handle the budget objection or a cheaper competitor objection)`,
+        why: "'Too expensive' is vague! Is it a budget problem or a value problem? Get them to clarify so you can address the root cause."
+      },
+      {
+        title: "THIS IS OUT OF OUR BUDGET",
+        icon: "📋",
+        script: `I completely understand...\n\nI always try my best to stay within my budget too.\n\nBut, when I find something I really like, solves a problem or makes my life easier - I buy it.\n\nAfter all, we work too hard to not buy the things we like and deserve!\n\nAnd you know what?\n\nYou deserve it!\n\nLet's do this!\n\n(Make sure to smile!)`,
+        why: "This word track works great to help your buyer come to their own conclusion that we all go over budget for the things we really want."
+      },
+      {
+        title: "GOING TO KEEP LOOKING",
+        icon: "🔍",
+        script: `I completely understand that you're wanting to look at a few other plumbing options before making a decision.\n\nI can't blame you for doing that - I usually like to gather as much information as I can too.\n\nTell me, what did you like most about what you've seen so far?\n\n'X, Y & Z'\n\nGot it - love to hear it!\n\nAt the end of the day, time is the only thing more valuable than getting looking around at other products, getting this taken care of now so you can spend your time on things that matter more?`,
+        why: "Although your buyer might have a serious consideration to continue looking around at other products, being home can be helpful and might help you close."
+      },
+      {
+        title: "DON'T WANT TO PAY EXTRA FOR A TANKLESS",
+        icon: "🏷️",
+        script: `I totally understand, tankless systems do cost more up front. However, most homeowners are buying a water heater...\n\nThey're upgrading to endless hot water, better efficiency and more space in their home.\n\nPlus, they usually last longer, help reduce utility bills over time so ultimately - you end up getting your money back later and then some!\n\nIf the cost of each were the same, would you rather go with the tankless system?`,
+        why: "You're nudging your customer back into seeing the value of the tankless instead of focusing on the extra cost and then isolating the price and the value."
+      },
+      {
+        title: "GOT TO CHECK WITH MY HOA",
+        icon: "🏠",
+        script: `I completely understand that you want to follow the guidelines.\n\nI work with a lot of homeowners in similar situations and usually, they're more concerned with what is being installed than who installs it.\n\nLet's figure out the best solution first, and then if we need to provide specs or documents for HOA approval, I'll personally help you with that - sound fair enough?`,
+        why: "You're doing your job and helping the customer past the HOA objection so they can make a decision and move forward with you."
+      },
+      {
+        title: "IS THAT YOUR BEST PRICE?",
+        icon: "🏷️",
+        script: `Yes, [customer name] - our customers always appreciate the transparency we offer by giving our best price up front.\n\nNot only are you getting our best price, but you'll also receive my personal service to ensure your total satisfaction.\n\nLet's go ahead and get this done so you can enjoy the comfort of your home and put more attention on all the other important things you have on your plate.\n\nWhen is the last time you felt bad about getting a problem fixed for you?`,
+        why: "Ensure your buyer that they are receiving your best price and quickly transition away from the price and move into your level of service."
+      },
+      {
+        title: "NOT SURE I CAN AFFORD IT",
+        icon: "🤷",
+        script: `I understand and appreciate the honesty.\n\nTo be sure, when you say that you 'can't afford it right now', do you mean that you don't want to make the purchase or that you can't make the purchase right now - even if you wanted to?\n\nAlternative Question:\nWould you consider doing this (or even upgrading to the next package) if I were able to make it affordable and fit within your budget?`,
+        why: "There's a difference between 'can't' and 'won't'. Use this or introduce your customer to financing options like a boss."
+      },
+      {
+        title: "I WANT A TEMPORARY FIX",
+        icon: "⚠️",
+        script: `I totally get you're not wanting the full replacement and feel comfortable with a more temporary solution right now.\n\nMy boss loves customers like you because you'll pay us to come out, come back out again, charge a trip fee and any other additional equipment costs next time...\n\nAside from the full replacement cost, is there anything else holding you back from getting this taken care of now and having the peace of mind that this is fixed, backed by a warranty and permanently handled?`,
+        why: "You're addressing the reality that they'll be back and pay more later. Then isolate the money. Prepare for pricing objections."
+      },
+      {
+        title: "WE'RE GOING TO WAIT... #2",
+        icon: "🪑",
+        script: `I completely understand that you're wanting to wait.\n\nOut of curiosity, if this product was free, would you be moving forward with this today?\n\n'Yes, I would'\n\nGot it, that's what most people say.\n\nHow come you'd move forward today if it were free?\n\n(Continue asking 'why' and allow your buyer to close themselves on the advantages and value they mentioned in their response)`,
+        why: "This word track allows your buyer to close themselves on the product's value and softly assists that they do business with you now."
+      },
+      {
+        title: "I DON'T TRUST CONTRACTORS",
+        icon: "🤝",
+        script: `I completely understand and appreciate your honesty.\n\nYou know, a lot of customers tell me that and you're probably not the only one who's had a bad experience.\n\nI appreciate you giving us the opportunity to show you that not all contractors are the same.\n\nBy working with us you'll have the peace of mind of knowing that we stand behind our work with a full warranty.\n\nFair enough?`,
+        why: "It's true: your customer probably got burnt in the past. Assume responsibility for it, control the problem and become the solution."
+      },
+      {
+        title: "CAN'T YOU JUST DO A QUICK FIX?",
+        icon: "🔧",
+        script: `I understand you're looking for a quick solution, and I get it.\n\nThe reality is, rushing through work is how problems get worse later on.\n\nI'd rather take the time to do it right than have you call us back in 6 months with a bigger problem.\n\nLet's do this the right way so you don't have to worry about it again.`,
+        why: "You're joking a bit with the homeowner and gracefully isolating price at the end. Be prepared to handle price after this word track."
+      },
+      {
+        title: "MY BUDDY IS A PLUMBER",
+        icon: "👨‍🔧",
+        script: `That's awesome! I'm sure your buddy does great work.\n\nThe thing is, when we work on jobs, we're representing a company with a reputation, warranty, and accountability.\n\nIf something goes wrong, your buddy might not be available or willing to come back - but we will.\n\nLet's get this done right with the peace of mind of a real warranty.`,
+        why: "Now isn't the time to throw anyone 'under the bus'. Quickly shift your buyer's attention to your level of professionalism and reputation for quality work."
+      },
+      {
+        title: "THIS SEEMS COMPLICATED",
+        icon: "🔀",
+        script: `I totally understand why it might seem that way.\n\nHere's the good news - you don't have to worry about the complicated part. That's our job.\n\nYour job is to sit back, relax, and let us handle all the details while you enjoy the results.\n\nSound good?`,
+        why: "Use this response to help isolate the real consideration and move your buyer closer to a real conversation."
+      },
+      {
+        title: "I COULD DO THIS MYSELF",
+        icon: "🛠️",
+        script: `That's great that you're handy! I respect that about you.\n\nThe reality is, if you could do this yourself, you probably would have already.\n\nWhat we bring to the table is expertise, proper equipment, and a warranty - plus we save you the time and headache.\n\nYour time is worth something, right?`,
+        why: "If your customer was confident that they could do it - they would. Build value in your experience, expertise and don't forget to sell them the value of their time."
+      },
+      {
+        title: "YOU HAVE BAD REVIEWS",
+        icon: "⭐",
+        script: `I appreciate you bringing that up. You know what?\n\nPeople with bad reviews still get business, and people with perfect reviews still lose customers.\n\nWhat matters most is how we treat you and the quality of the work we do.\n\nLet's focus on making sure you have an amazing experience with us.`,
+        why: "Your customers still spend money with businesses with poor reviews - remind them of it and keep this light, with a smile on your face."
+      },
+      {
+        title: "I'M WORRIED ABOUT RISK",
+        icon: "⚠️",
+        script: `I get it, and honestly, that's smart thinking.\n\nThat's exactly why we offer a full warranty on our work.\n\nYou're protected. If anything goes wrong, we'll take care of it.\n\nThat's the whole point of working with a professional company - the risk is on us, not you.`,
+        why: "You're acknowledging your customer while creating awareness that there are risks to doing the install themselves and reminding them to save time."
+      },
+      {
+        title: "HOW DO YOU DETERMINE PRICING?",
+        icon: "💰",
+        script: `Great question. Here's how we work:\n\nWe assess what needs to be done, the materials required, the time involved, and the expertise needed.\n\nThat all factors into our flat-rate pricing.\n\nThe benefit for you is that you get a clear, out-the-door price with no surprises. No hidden fees, no hourly billing that goes over.\n\nFair pricing for quality work.`,
+        why: "You're not getting baited into any price traps here! It's only fair for the homeowner to allow you to do your job to obtain your pricing."
+      },
+      {
+        title: "ARE YOU SURE ABOUT THIS?",
+        icon: "✓",
+        script: `Absolutely. I wouldn't recommend it if I didn't think it was the right move for you.\n\nBased on everything we've talked about, this solution addresses all the issues you mentioned.\n\nYou're going to be happy with this decision.`,
+        why: "Double check that you're on the right package and that your customer wants it. Then use humor to suggest that you could charge more."
+      },
+      {
+        title: "WHAT IF SOMETHING GOES WRONG?",
+        icon: "🔧",
+        script: `That's a fair question. Here's what happens:\n\nWe stand behind our work with a full warranty.\n\nIf anything goes wrong, just give us a call and we'll come back out and fix it - no additional charge.\n\nThat's the peace of mind you get when you work with professionals.`,
+        why: "You're laying all your cards on the table and finishing this word track off with a humorous (and true) anecdote."
+      },
+      {
+        title: "THIS WILL ONLY GET WORSE",
+        icon: "📈",
+        script: `Exactly right. And that's the problem.\n\nSmall issues become big problems. Big problems become expensive emergencies.\n\nThe smart move is to take care of it now while it's manageable.\n\nLet's handle this before it costs you way more down the road.`,
+        why: "You're educating your customer without arguing with them. You're asking them logically to move forward and take care of the issue before it gets any larger."
+      },
+      {
+        title: "WHAT EXACTLY AM I PAYING FOR?",
+        icon: "🎯",
+        script: `Great question. You're paying for:\n\n• Materials and equipment\n• Expert installation\n• Warranty coverage\n• Ongoing support\n• Peace of mind\n\nIt's not just the service - it's the complete solution with protection.`,
+        why: "If they say 'price', then get specific about pricing - monthly, up front fees...etc. If they say value, get specific about what they are really shopping for."
+      },
+      {
+        title: "DO I REALLY NEED THIS NOW?",
+        icon: "⏰",
+        script: `That's something only you can answer. But here's what I know:\n\nYou called us because something needs attention.\n\nDelay usually means more expensive repairs later.\n\nPlus, you'll have peace of mind knowing it's handled.\n\nWhat do you think?`,
+        why: "Remind them that they don't need it - but will want it later on if something requires attention. Then ask the final question with a smile."
+      },
+      {
+        title: "I HAVE OTHER BILLS TO PAY",
+        icon: "💳",
+        script: `I hear you - we all do.\n\nBut think about it this way: you're going to pay bills no matter what.\n\nWouldn't you rather have this taken care of so you can enjoy your home without the stress of a plumbing issue hanging over your head?\n\nLet's get this done.`,
+        why: "Nobody loves bills and payments - but we do love what we receive in exchange for our money. Add your product to the list!"
+      },
+      {
+        title: "THIS IS A BIG DECISION",
+        icon: "🎯",
+        script: `It is, and I respect that you're taking it seriously.\n\nHere's the thing: doing nothing is also a big decision.\n\nAnd usually, the consequences of doing nothing are bigger than the cost of fixing it now.\n\nLet's move forward together.`,
+        why: "This approach is relatable with a health analogy and rewards the customer for being proactive. The question isolates the price so prepare for money objections."
+      },
+      {
+        title: "CAN WE SCHEDULE LATER?",
+        icon: "📅",
+        script: `Absolutely, we can work with your schedule.\n\nBut here's the thing - the sooner we get this done, the sooner you can stop worrying about it.\n\nWhat dates work best for you?`,
+        why: "Time kills all deals. Acknowledge their time objection and move them closer to the real objection & be prepared for more."
+      },
+      {
+        title: "WHY SHOULD I CHOOSE YOU?",
+        icon: "🌟",
+        script: `Because we deliver quality work backed by a warranty.\n\nWe're professional, accountable, and we treat your home like it's our own.\n\nYour satisfaction isn't just a goal for us - it's a guarantee.\n\nLet's work together.`,
+        why: "Use this inclusive language to allow your buyer to feel as though they are joining a larger group of people who are being proactive and taking responsibility."
+      },
+      {
+        title: "LET'S DO THIS",
+        icon: "✅",
+        script: `Excellent! I'm excited to get started.\n\nHere's what happens next:\n\n1. We schedule your installation\n2. Our team handles everything\n3. You enjoy the results\n\nLet's make this happen!`,
+        why: "You're ready to close. Confirm the decision and lay out the next steps clearly."
+      }
+    ];
+
+    let filteredDeck = [...deck];
+    let currentIndex = 0;
+
+    const cardContainer = document.getElementById('cardContainer');
+    const navigationContainer = document.getElementById('navigationContainer');
+    const noResultsDiv = document.getElementById('noResults');
+    const cardElement = document.getElementById('card');
+    const searchInput = document.getElementById('searchInput');
+
+    function renderCard(resetFlip = true) {
+      if (filteredDeck.length === 0) {
+        cardContainer.style.display = 'none';
+        navigationContainer.style.display = 'none';
+        noResultsDiv.style.display = 'block';
+        return;
+      }
+
+      cardContainer.style.display = 'block';
+      navigationContainer.style.display = 'flex';
+      noResultsDiv.style.display = 'none';
+
+      if (resetFlip) {
+        cardElement.classList.remove('flipped');
+      }
+
+      const cardData = filteredDeck[currentIndex];
+      document.getElementById('frontTitle').innerText = cardData.title;
+      document.getElementById('frontIcon').innerText = cardData.icon || "💡";
+      document.getElementById('backScript').innerText = cardData.script;
+      document.getElementById('whyText').innerText = cardData.why;
+      document.getElementById('cardCounter').innerText = `${currentIndex + 1} of ${filteredDeck.length}`;
+      
+      // Scroll card back face back to top when switching cards
+      document.querySelector('.card-back').scrollTop = 0;
+    }
+
+    function toggleFlip() {
+      if (filteredDeck.length === 0) return;
+      cardElement.classList.toggle('flipped');
+    }
+
+    function prevCard() {
+      if (filteredDeck.length === 0) return;
+      currentIndex = (currentIndex - 1 + filteredDeck.length) % filteredDeck.length;
+      renderCard(true);
+    }
+
+    function nextCard() {
+      if (filteredDeck.length === 0) return;
+      currentIndex = (currentIndex + 1) % filteredDeck.length;
+      renderCard(true);
+    }
+
+    // Touch Handling (Prevents flip on swipe)
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    cardContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    cardContainer.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      // Only treat as horizontal swipe if horizontal displacement exceeds vertical movement
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 0) prevCard();
+        else nextCard();
+      } else if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
+        toggleFlip();
+      }
+    }, false);
+
+    // Keyboard Controls
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement === searchInput) return;
+
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        toggleFlip();
+      } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextCard();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevCard();
+      }
+    });
+
+    function filterCards() {
+      const query = searchInput.value.toLowerCase().trim();
+      filteredDeck = deck.filter(c => 
+        c.title.toLowerCase().includes(query) || 
+        c.script.toLowerCase().includes(query) ||
+        c.why.toLowerCase().includes(query)
+      );
+      currentIndex = 0;
+      renderCard(true);
+    }
+
+    // Register service worker for offline support
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => {
+        console.log('Service Worker registration failed:', err);
+      });
+    }
+
+    // Initialize the app
+    renderCard(true);
+  </script>
+</body>
+</html>
