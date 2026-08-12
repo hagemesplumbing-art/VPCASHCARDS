@@ -770,11 +770,16 @@
       renderCard(true);
     }
 
-    // Mouse + touch interactions
+    // Mouse click should only flip on non-touch devices.
     cardElement.addEventListener('click', (event) => {
+      if (window.matchMedia('(pointer: coarse)').matches) {
+        return;
+      }
+
       if (event.target.closest('.card-back-content')) {
         return;
       }
+
       toggleFlip();
     });
 
