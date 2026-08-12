@@ -122,14 +122,15 @@
       border-radius: 16px;
       border: 3px solid var(--card-border);
       background-color: var(--card-bg);
-      padding: 16px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
       transform: translateZ(0);
+    }
+
+    .card-front {
+      padding: 16px;
     }
 
     .card-front {
@@ -139,6 +140,7 @@
       position: relative;
       z-index: 2;
       transform: rotateY(0deg);
+      padding: 16px;
     }
 
     .card-corner {
@@ -205,6 +207,16 @@
       background-color: #1a1a1a;
       text-align: left;
       z-index: 1;
+      padding: 0;
+    }
+
+    .card-back-content {
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 0;
@@ -219,7 +231,6 @@
       margin-bottom: 8px;
       word-wrap: break-word;
       overflow-wrap: break-word;
-      flex-grow: 1;
     }
 
     .why-it-works {
@@ -228,7 +239,6 @@
       border-top: 2px solid var(--accent-color);
       background-color: #111111;
       border-radius: 8px;
-      flex-shrink: 1;
       overflow: visible;
       margin-bottom: 0;
     }
@@ -327,10 +337,12 @@
         <div class="footer-logo">STUPAR ENTERPRISES</div>
       </div>
       <div class="card-face card-back">
-        <div class="script-text" id="backScript"></div>
-        <div class="why-it-works" id="whyBlock">
-          <div class="why-it-works-title">WHY IT WORKS</div>
-          <div class="why-it-works-text" id="whyText"></div>
+        <div class="card-back-content">
+          <div class="script-text" id="backScript"></div>
+          <div class="why-it-works" id="whyBlock">
+            <div class="why-it-works-title">WHY IT WORKS</div>
+            <div class="why-it-works-text" id="whyText"></div>
+          </div>
         </div>
       </div>
     </div>
