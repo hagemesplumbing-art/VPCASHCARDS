@@ -371,17 +371,20 @@
         font-size: 16px; /* Prevents zoom on iOS */
       }
 
-      /* Mobile: Show list view instead of cards */
       .card-container {
-        display: none !important;
+        display: block !important;
+        width: 100%;
+        max-width: 100%;
+        min-height: 420px;
+        height: 62vh;
       }
 
       .navigation {
-        display: none !important;
+        display: flex !important;
       }
 
       .mobile-list {
-        display: block;
+        display: none !important;
       }
     }
   </style>
