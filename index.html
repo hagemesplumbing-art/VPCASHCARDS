@@ -125,8 +125,9 @@
       padding: 16px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       overflow-y: auto;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       transform: translateZ(0);
     }
@@ -204,6 +205,9 @@
       background-color: #1a1a1a;
       text-align: left;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .script-text {
@@ -212,19 +216,21 @@
       color: #e2e2e2;
       white-space: pre-line;
       font-weight: 400;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      flex-grow: 1;
     }
 
     .why-it-works {
-      margin-top: 15px;
+      margin-top: 12px;
       padding: 10px 12px;
       border-top: 2px solid var(--accent-color);
       background-color: #111111;
       border-radius: 8px;
       flex-shrink: 1;
       overflow: visible;
+      margin-bottom: 0;
     }
 
     .why-it-works-title {
