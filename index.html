@@ -250,25 +250,6 @@
       gap: 15px;
     }
 
-    .nav-button {
-      background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: all 0.2s;
-      font-family: 'Oswald', sans-serif;
-    }
-
-    .nav-button:active {
-      background-color: var(--accent-color);
-      color: #000;
-      transform: scale(0.95);
-    }
-
     .counter {
       font-family: 'Oswald', sans-serif;
       font-size: 1.1rem;
@@ -344,9 +325,7 @@
   </div>
 
   <div class="navigation" id="navigationContainer" style="display:none;">
-    <button class="nav-button" onclick="prevCard()">← PREV</button>
     <span class="counter" id="cardCounter">1 of 46</span>
-    <button class="nav-button" onclick="nextCard()">NEXT →</button>
   </div>
 
   <script>
