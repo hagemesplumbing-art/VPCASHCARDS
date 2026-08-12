@@ -213,6 +213,8 @@
       white-space: pre-line;
       font-weight: 400;
       margin-bottom: 10px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .why-it-works {
@@ -221,7 +223,8 @@
       border-top: 2px solid var(--accent-color);
       background-color: #111111;
       border-radius: 8px;
-      flex-shrink: 0;
+      flex-shrink: 1;
+      overflow: visible;
     }
 
     .why-it-works-title {
@@ -238,6 +241,9 @@
       font-size: 0.82rem;
       color: #bbb;
       line-height: 1.35;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
 
     .navigation {
