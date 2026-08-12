@@ -318,51 +318,77 @@
         font-size: 16px; /* Prevents zoom on iOS */
       }
 
-      /* Mobile: Disable 3D transforms completely */
+      /* Mobile: Show content in simple scrollable format */
       .card-container {
-        perspective: none;
-        height: auto;
-        max-height: none;
-        min-height: auto;
+        perspective: none !important;
+        width: 100%;
+        max-width: 100%;
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        display: block !important;
       }
 
       .card {
-        transform-style: flat;
+        transform-style: flat !important;
         transform: none !important;
-        height: auto;
-        min-height: 60vh;
-        min-height: 60dvh;
+        width: 100%;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        position: relative;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        border: 3px solid var(--card-border);
+        background-color: var(--card-bg);
+        margin-bottom: 20px;
       }
 
       .card-face {
-        position: static;
-        -webkit-backface-visibility: visible;
-        backface-visibility: visible;
-        overflow: visible;
-        padding: 0;
-        height: auto;
+        position: static !important;
+        width: 100%;
+        height: auto !important;
+        -webkit-backface-visibility: visible !important;
+        backface-visibility: visible !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        display: block !important;
+        flex-direction: row !important;
+        justify-content: flex-start !important;
       }
 
       .card-front {
-        display: none;
+        display: none !important;
       }
 
       .card-back {
         transform: none !important;
-        position: static;
+        position: static !important;
         width: 100%;
-        height: auto;
-        overflow: visible;
+        height: auto !important;
+        overflow: visible !important;
         padding: 16px;
         box-sizing: border-box;
+        background-color: #1a1a1a;
+        text-align: left;
       }
 
       .card-back-content {
-        position: static;
-        height: auto;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 0;
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        -webkit-overflow-scrolling: auto;
+        padding: 0 !important;
+        display: block !important;
+        flex-direction: row !important;
+        gap: 0;
+        box-sizing: border-box;
       }
     }
   </style>
